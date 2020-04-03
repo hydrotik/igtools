@@ -30,14 +30,14 @@ db.collection.updateMany()
 
 db.followers.updateMany( {},{ $set: { active: true} })
 
-db.followers.updateMany( {username: "josefinehoemke"},{ $set: { active: false} })
+db.followers.updateMany( {username: "djdonovannyc"},{ $set: { active: false} })
 
 db.followers.updateMany( {},{ $unset: {img:"" } })
 
-db.followers.find( {username:"josefinehoemke"} )
+db.followers.find( {username:"djdonovannyc"} )
 db.followers.find( {active:false}, {username:1} )
 
-db.followers.updateOne( {username: "josefinehoemke"},{ $set: { active: false, dateUnfollowed: new Date()}})
+db.followers.updateOne( {username: "djdonovannyc"},{ $set: { active: false, dateUnfollowed: new Date()}})
 
 db.followers.updateMany( {active: false},{ $set: { active: true}, $unset: {dateUnfollowed: ""}})
 
