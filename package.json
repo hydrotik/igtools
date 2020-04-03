@@ -1,0 +1,28 @@
+{
+  "name": "igtools",
+  "version": "1.0.0",
+  "description": "Instagram Tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^9.0.0",
+    "@hapi/glue": "^7.0.0",
+    "@hapi/hapi": "^19.0.5",
+    "@hapi/hoek": "^9.0.2",
+    "@hapi/inert": "^6.0.1",
+    "@hapi/vision": "^6.0.0",
+    "admin-bro": "^1.6.6",
+    "admin-bro-hapijs": "^0.2.2",
+    "admin-bro-mongoose": "^0.4.0",
+    "handlebars": "^4.7.2",
+    "html-to-json": "^0.6.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "mongoose": "^5.8.10"
+  }
+}

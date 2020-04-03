@@ -1,0 +1,12 @@
+{
+    "server": {
+        "port": 8000
+    },
+    "register": {
+        "plugins": [
+            { "plugin": "./plugins/static.js" },
+            { "plugin": "./plugins/api.js" },
+            { "plugin": "./plugins/followers.js" }
+        ]
+    }
+}

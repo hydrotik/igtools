@@ -1,0 +1,205 @@
+<!DOCTYPE doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+            <title>
+                {{title}}
+            </title>
+        </meta>
+        <link rel="stylesheet" type="text/css" href="css/core.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="//code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="js/core.js"></script>
+    </head>
+    <body>
+
+      <div class="container">
+        <h2>Parse</h2>
+        <form action="/api/parse" id="followersForm">
+          <fieldset>
+            <div class="row">
+              <div class="column">
+                <label for="usernameField">Username Class</label>
+                <input type="text" placeholder="FPmhX" id="usernameField">
+                <label for="fullNameField">Full Name Class</label>
+                <input type="text" placeholder="wFPL8" id="fullNameField">
+                <label for="pictureField">Picture Class</label>
+                <input type="text" placeholder="_6q-tv" id="pictureField">
+                <label for="codeField">Code</label>
+                <textarea id="codeField"></textarea>
+              </div>
+            </div>
+              <div class="row">
+                <div class="column column-50">
+                  <input class="button-primary" type="submit" value="Submit">
+                </div>
+                <div class="column column-50">
+                  <div class="parse-info"></div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+        <div class="container">
+          <h2>Compare</h2>
+          <form action="/api/compare" id="compareForm">
+            <fieldset>
+              <div class="row">
+                <div class="column column-50">
+                  <label for="file1Field">File One</label>
+                  <select id="file1Field">
+                  </select>
+                </div>
+
+                <div class="column column-50">
+                  <label for="file2Field">File Two</label>
+                  <select id="file2Field">
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="column column-50">
+                  <input class="button-primary" type="submit" value="Compare">
+                </div>
+                <div class="column column-50">
+                  <div class="compare-info"></div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="column">
+              <pre id="output">
+                <code>
+                </code>
+              </pre>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="container">
+          <h2>Load All</h2>
+            <div class="row">
+              <div class="column column-50">
+                <input class="button-primary" id="get-all-button" type="submit" value="Get All" />
+              </div>
+              <div class="column column-50">
+                <div class="list-info"></div>
+              </div>
+            </div>
+        </div>
+
+        <div class="container"id="list-all">
+        </div>
+
+
+        <script>
+        
+
+        //************** Post Parse **************
+
+        $( "#followersForm" ).submit(function( event ) {
+          event.preventDefault();
+
+          $( ".parse-info" ).empty().append( '<div>Working...</div>' );
+
+          var $form = $( this ),
+            code = $form.find( "textarea" ).val(),
+            url = $form.attr( "action" );
+         
+          var posting = $.post( url, { code: code } );
+         
+          posting.done(function( data ) {
+            console.log(data);
+            $( ".parse-info" ).empty().append( '<div>Done</div>' );
+            var $list = $('#list-all');
+                  $list.append($('<h3>' + data.length + ' Users Unfollowed</h3>'));
+
+                  for (i = 0; i < data.length; i++) { 
+                    $list.append(getUserRow(data[i]));
+                  }
+          });
+        });
+
+        //************** Post Compare *************
+
+        $( "#compareForm" ).submit(function( event ) {
+          event.preventDefault();
+         
+          var $form = $( this ),
+            file1 = $form.find( "#file1Field" ).val().split(".")[0],
+            file2 = $form.find( "#file2Field" ).val().split(".")[0],
+            url = $form.attr( "action" );
+
+          if(file1 === file2){
+            $("select").css("background-color", "#BBBBBB");
+            $(".compare-info").empty().append('<div>Select two unique documents</div>');
+          }else{
+            $("select").css("background-color", "transparent");
+            $(".compare-info").empty();
+            var posting = $.post( url, { file1: file1, file2: file2 } );
+           
+            posting.done(function( data ) {
+              $( ".compare-info" ).empty().append( '<div>Done</div>' );
+              $( "pre#output code" ).empty().append(JSON.stringify(data, null, 4));
+
+            });
+          }
+        });
+
+
+        //************ Get File List *************
+
+        $.ajax({
+          url: "/api/files"
+        })
+          .done(function( data ) {
+            var f1 = $('#file1Field');
+            var f2 = $('#file2Field');
+            for (i = 0; i < data.length; i++) { 
+              f1.append($('<option value="'+data[i].value+'">' + data[i].value + '</option>'));
+              f2.append($('<option value="'+data[i].value+'">' + data[i].value + '</option>'));
+            }
+          });
+
+
+
+
+      $( "#get-all-button" ).click(function() {
+
+              $.ajax({
+                url: "/api/all"
+              })
+                .done(function( data ) {
+
+                  var $list = $('#list-all');
+                  $list.append($('<h3>' + (data.length - 1) + ' Users Managed</h3>'));
+
+
+                  for (i = 0; i < data.length; i++) { 
+                    $list.append(getUserRow(data[i]));
+                  }
+                });
+      });
+
+
+      function getUserRow(item){
+        return $('<div class="row"><div class="column column-25"><a href="https://www.instagram.com' + item.href + '" target="_blank">' + item.username + '</a></div><div class="column column-25">' + item.fullname + '</div><div class="column column-25">' + ((item.active == true) ? '<i class="material-icons">done</i>' : '<i class="material-icons">highlight_off</i>') + '</div><div class="column column-25">' + getDate(item.updated) + '</div></div>');
+      }
+
+      function getDate(item){
+        return moment(item.toString()).format('M-D-YYYY h:mm:ss a')
+      }
+            
+        </script>
+    </body>
+</html>
