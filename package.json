@@ -22,7 +22,7 @@
     "admin-bro-mongoose": "^0.4.2",
     "handlebars": "^4.7.5",
     "html-to-json": "^0.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "mongoose": "^5.9.7"
   }
