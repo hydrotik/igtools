@@ -23,7 +23,7 @@
     "handlebars": "^4.7.5",
     "html-to-json": "^0.6.0",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.7"
   }
 }
